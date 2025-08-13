@@ -1,0 +1,73 @@
+{
+  "name": "TerrawattEnergy Subscribe form",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "terrawattenergy-subscription",
+        "options": {}
+      },
+      "id": "0fa63281-c91b-4931-8933-660e6f8fa326",
+      "name": "Receive Subscribe Form",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -48
+      ],
+      "webhookId": "fb941aaf-d06b-4e62-bf5b-3b10ce11cdf3"
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "={{ $json.body.email }}",
+        "subject": "Thanks for subscribing to Terrawatt Energy!",
+        "emailFormat": "html",
+        "html": "=<p>Dear {{ $json.body.first_name || 'Subscriber' }},</p><p>Thank you for subscribing to the Terrawatt Energy.</p><p>You're now part of a community that receives exclusive insights and updates from the global leader in oil and gas refinery solutions. We're dedicated to operational excellence and helping our partners achieve peak performance through our expertise in predictive and preventive maintenance, corrosion management, and more</p><p>We look forward to keeping you informed and inspired.</p><p>Warm regards,<br>Terrawatt</p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "1994db4d-b235-4953-973e-3913c1eef8db",
+      "name": "Send Thank You Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        640,
+        -48
+      ],
+      "webhookId": "0620e881-14f3-4fb7-8b15-32c119646947",
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Subscribe Form": {
+      "main": [
+        [
+          {
+            "node": "Send Thank You Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f6a61d4c-412f-4a6d-b390-baad52b9b6d7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "106bf74268a1557bb6b9081132803308735ffefaa2e140b9bd02733d0b687441"
+  },
+  "id": "7xFOajiiChAt8GJz",
+  "tags": []
+}

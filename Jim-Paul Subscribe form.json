@@ -1,0 +1,73 @@
+{
+  "name": "Jim-Paul Subscribe form",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "zoho-autoresponder",
+        "options": {}
+      },
+      "id": "db144f39-c78c-4e40-89aa-e8d80e7af8b6",
+      "name": "Receive Subscribe Form",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -48
+      ],
+      "webhookId": "1c1702a2-2707-465c-9771-4ac6dc9ab471"
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "={{ $json.body.email }}",
+        "subject": "Thanks for subscribing to Jim Paul!",
+        "emailFormat": "html",
+        "html": "=<p>Dear {{ $json.body.first_name || 'Subscriber' }},</p><p>Thank you for subscribing to the Jim Paul Realty newsletter.</p><p>You’re now part of a community that receives exclusive updates on the latest property listings, expert insights on the real estate market, and tips to help you make confident property decisions.</p><p>We look forward to keeping you informed and inspired.</p><p>Warm regards,<br>Jim Paul</p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "5c19f0de-cae8-484b-9467-af4bd7ccb635",
+      "name": "Send Thank You Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        640,
+        -48
+      ],
+      "webhookId": "705f775d-6102-4357-9e3c-d74c6c09ec69",
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Subscribe Form": {
+      "main": [
+        [
+          {
+            "node": "Send Thank You Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "691d4128-efb4-46f6-b861-ae7fcfdc1bdb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "106bf74268a1557bb6b9081132803308735ffefaa2e140b9bd02733d0b687441"
+  },
+  "id": "0sS81ItiSq3cBa2M",
+  "tags": []
+}

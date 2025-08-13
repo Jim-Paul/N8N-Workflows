@@ -1,0 +1,156 @@
+{
+  "name": "Jim-Paul Viewing form",
+  "nodes": [
+    {
+      "parameters": {
+        "project": {
+          "__rl": true,
+          "value": "10033",
+          "mode": "list",
+          "cachedResultName": "Jimpaul-Operations"
+        },
+        "issueType": {
+          "__rl": true,
+          "value": "10101",
+          "mode": "list",
+          "cachedResultName": "Sub-task"
+        },
+        "summary": "Sub-task created from viewing form",
+        "additionalFields": {
+          "description": "=Viewing Request Details:  \nName: {{$json.body.first_name}} {{$json.body.last_name}} \nEmail: {{$json.body.email}} \nPhone: {{$json.body.phone_number}} \nProperty: {{$json.body.property_title}}\nBuying Status: {{$json.body.buying_status}}\nFunding Status: {{$json.body.funding_status}}\n\n\n",
+          "parentIssueKey": "JO-2"
+        }
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -128
+      ],
+      "id": "38b9dc98-7d61-45ee-bb9a-7f55b383039d",
+      "name": "Create an issue",
+      "alwaysOutputData": true,
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "OmqNGs1d4Za1HEpR",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "viewing-request",
+        "options": {}
+      },
+      "id": "1a44c7b0-4361-4eb4-9905-28ba4f3848b0",
+      "name": "Receive Viewing Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        160
+      ],
+      "webhookId": "38ad2d3e-bc6d-48a7-9682-121a256cfbaf"
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "info@jimpaul.ng",
+        "subject": "={{ 'New Property Viewing Request – ' + $json.body.first_name + ' ' + $json.body.last_name }}",
+        "emailFormat": "html",
+        "html": "=<p><strong>New Property Viewing Request Received</strong></p>\n\n<p><strong>Name:</strong> {{$json.body.first_name}} {{$json.body.last_name}}<br>\n<strong>Email:</strong> {{$json.body.email}}<br>\n<strong>Phone:</strong> {{$json.body.phone_number}}<br>\n<p><strong>Property:</strong> {{$json.body.property_title}}</p>\n\n<p><strong>Buying Status:</strong> {{$json.body.buying_status}}<br>\n<strong>Funding Status:</strong> {{$json.body.funding_status}}\n\n<p>This request was submitted via the website's 'Request a Viewing' form. Please follow up with the client promptly.</p>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "57f1c4c8-f88a-48cd-af22-e83906070c22",
+      "name": "Send Email to Company",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        -288,
+        64
+      ],
+      "webhookId": "1eee327f-692c-410d-8ee2-91ba992e61d3",
+      "alwaysOutputData": true,
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "={{ $json.body.email }}",
+        "subject": "={{ 'Your Property Viewing Request Has Been Received' }}",
+        "emailFormat": "html",
+        "html": "=<p>Dear {{$json.body.first_name}},</p>\n\n<p>Thank you for requesting a viewing for the property below:</p>\n\n<p>\n  <strong>Property:</strong> {{$json.body.property_title}}</p>\n\n<p>\nWe’ve received your request and a member of our team will be in touch shortly to confirm the available date and time.\n</p>\n\n<p>\nIn the meantime, if you have any questions or need assistance, feel free to reach out to us.\n</p>\n\n<p>\nWarm regards,<br>\n<strong>Jim Paul</strong>\n</p>\n",
+        "options": {}
+      },
+      "id": "5cf8002a-ed4d-4077-bc1f-75eb413571ba",
+      "name": "Send Confirmation to User",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        -288,
+        272
+      ],
+      "webhookId": "f6ad6347-22a9-4149-b6ea-97ba5a40757a",
+      "alwaysOutputData": true,
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Viewing Request": {
+      "main": [
+        [
+          {
+            "node": "Send Email to Company",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Confirmation to User",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email to Company": {
+      "main": [
+        []
+      ]
+    },
+    "Create an issue": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5dc49d45-4574-451a-a268-af8d6d17ece3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "106bf74268a1557bb6b9081132803308735ffefaa2e140b9bd02733d0b687441"
+  },
+  "id": "gt3GRkvyWfkgPHZx",
+  "tags": []
+}

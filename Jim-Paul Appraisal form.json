@@ -1,0 +1,146 @@
+{
+  "name": "Jim-Paul Appraisal form",
+  "nodes": [
+    {
+      "parameters": {
+        "project": {
+          "__rl": true,
+          "value": "10033",
+          "mode": "list",
+          "cachedResultName": "Jimpaul-Operations"
+        },
+        "issueType": {
+          "__rl": true,
+          "value": "10101",
+          "mode": "list",
+          "cachedResultName": "Sub-task"
+        },
+        "summary": "=Sub-task created from Appraisal form",
+        "additionalFields": {
+          "description": "=Appraisal Request Details:\n\nName: {{$json.body.first_name}} {{$json.body.last_name}}\nEmail: {{$json.body.email}}\nPhone: {{$json.body.phone_number}}\nAddress: {{$json.body.address}}\nTown/City: {{$json.body.town_city}}\nLead Source: {{$json.body.source}}",
+          "parentIssueKey": "JO-1"
+        }
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        32,
+        128
+      ],
+      "id": "eda2af25-b9ad-42b8-8f5d-6a86288a7063",
+      "name": "Create an issue",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "OmqNGs1d4Za1HEpR",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "info@jimpaul.ng",
+        "subject": "={{ 'New Property Appraisal request – ' + $json.body.first_name + ' ' + $json.body.last_name }}",
+        "emailFormat": "html",
+        "html": "=<p><strong>New Property Appraisal Request Received</strong></p>\n\n<p><strong>Name:</strong> {{$json.body.first_name}} {{$json.body.last_name}}<br>\n<strong>Email:</strong> {{$json.body.email}}<br>\n<strong>Phone:</strong> {{$json.body.phone_number}}<br>\n<p><strong>Property Address:</strong> {{$json.body.address}}<br>\n<strong>Location of Property:</strong> {{$json.body.town_city}}</p>\n\n<p><strong>Property internal size:</strong> {{$json.body.internal_size}}<br>\n<strong>Property Target price:</strong> {{$json.body.target_price}}<br>\n<strong>Source:</strong> {{$json.body.source}}</p>\n\n<p>This request was submitted via the website's 'Request a Viewing' form. Please follow up with the client promptly.</p>\n",
+        "options": {}
+      },
+      "id": "fe31ee4c-03be-4947-bc5b-9c121183f145",
+      "name": "Send Email to Company",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        32,
+        288
+      ],
+      "webhookId": "1eee327f-692c-410d-8ee2-91ba992e61d3",
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "={{ $json.body.email }}",
+        "subject": "={{ 'Your Property Appraisal Request Has Been Received' }}",
+        "emailFormat": "html",
+        "html": "=<p>Dear {{$json.body.first_name}},</p>\n\n<p>Thank you for submitting a property appraisal request.</p>\n\n<p>\n  <strong>Property Address:</strong> {{$json.body.address}}<br>\n  <strong>Town/City:</strong> {{$json.body.town_city}}\n</p>\n\n<p>\nWe’ve received your details and our valuation team will review the information you’ve provided. A member of our team will reach out shortly to discuss the next steps and schedule a visit if necessary.\n</p>\n\n<p>\nIf you have any questions or need further assistance, don’t hesitate to call us at 09081330505.\n</p>\n\n<p>\nWarm regards,<br>\n<strong>Jim Paul</strong>\n</p>\n\n",
+        "options": {}
+      },
+      "id": "629fdda3-f956-4765-bf1a-6b0abd31c0f7",
+      "name": "Send Confirmation to User",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        32,
+        464
+      ],
+      "webhookId": "f6ad6347-22a9-4149-b6ea-97ba5a40757a",
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "appraisal-form",
+        "options": {}
+      },
+      "id": "dc7421a1-7a18-4835-9629-f008c4938fd2",
+      "name": "Receive Appraisal Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        304
+      ],
+      "webhookId": "38ad2d3e-bc6d-48a7-9682-121a256cfbaf"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Send Email to Company": {
+      "main": [
+        []
+      ]
+    },
+    "Receive Appraisal Request": {
+      "main": [
+        [
+          {
+            "node": "Send Email to Company",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Confirmation to User",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "bf98ffc7-2f5f-4849-95e4-cdb45f0c365d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "106bf74268a1557bb6b9081132803308735ffefaa2e140b9bd02733d0b687441"
+  },
+  "id": "bxO58Y9hCz3sclBS",
+  "tags": []
+}

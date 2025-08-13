@@ -1,0 +1,169 @@
+{
+  "name": "Terrawattenergy form copy",
+  "nodes": [
+    {
+      "parameters": {
+        "project": {
+          "__rl": true,
+          "value": "10033",
+          "mode": "list",
+          "cachedResultName": "Jimpaul-Operations"
+        },
+        "issueType": {
+          "__rl": true,
+          "value": "10101",
+          "mode": "list",
+          "cachedResultName": "Sub-task"
+        },
+        "summary": "Sub-task created from Reporting concerns on terrawattenergy",
+        "additionalFields": {
+          "description": "=Reporting Safety Concerns Details on terrawatt:  \nName: {{$json.body.name}} \nEmail: {{$json.body.email}} \nLocation: {{$json.body.location}}\nConcern : {{$json.body.decription}}\n\n\n",
+          "customFieldsUi": {
+            "customFieldsValues": [
+              {
+                "fieldId": {
+                  "__rl": true,
+                  "value": "customfield_10128",
+                  "mode": "list",
+                  "cachedResultName": "Due-date"
+                },
+                "fieldValue": "={{ DateTime.now().plus({ days: 7 }).toFormat('yyyy-MM-dd') }}"
+              }
+            ]
+          },
+          "parentIssueKey": "JO-22"
+        }
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -128
+      ],
+      "id": "51f71823-019b-4976-a5fc-c63306345b74",
+      "name": "Create an issue",
+      "alwaysOutputData": true,
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "OmqNGs1d4Za1HEpR",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "safety-concern",
+        "options": {}
+      },
+      "id": "f92c41c2-bd6e-4b94-89eb-2f8412a20daa",
+      "name": "Receive Viewing Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        160
+      ],
+      "webhookId": "4891e2c4-aa0f-47ef-aef2-637c89e10be9"
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "info@jimpaul.ng",
+        "subject": "={{ 'Description of Safety Concerns' }}",
+        "emailFormat": "html",
+        "html": "=<p><strong>Report a Safety Concern</strong></p>\n\n<p><strong>Name:</strong> {{$json.body.name}}<br>\n<strong>Email:</strong> {{$json.body.email}} <br>\n<strong>Concern:</strong> {{$json.body.decription}}\n\n<p>This request was submitted via the terraformenergy's website 'Report a safety Concern' form. Please follow up with the client promptly.</p>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "63b29f87-1df4-4338-a252-412fc22bbfe1",
+      "name": "Send Email to Company",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        -288,
+        64
+      ],
+      "webhookId": "e0515f8a-4190-4c22-8e57-36fa2d047933",
+      "alwaysOutputData": true,
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "info@jimpaul.ng",
+        "toEmail": "={{ $json.body.email }}",
+        "subject": "={{ 'Description of Safety Concerns' }}",
+        "emailFormat": "html",
+        "html": "=<p>Dear {{$json.body.name}},</p>\n\n<p>Thank you for submitting a safety concern form:</p>\n\n<p>\nWe’ve received your request and it will be addressed and worked on immediately.\n</p>\n\n<p>\nIn the meantime, if you have any questions or need assistance on any other issue, feel free to reach out to us.\n</p>\n\n<p>\nWarm regards,<br>\n<strong>Terrawatt</strong>\n</p>\n",
+        "options": {}
+      },
+      "id": "ea4f92ab-882d-4a35-b607-1f1ac4b31f09",
+      "name": "Send Confirmation to User",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        272
+      ],
+      "webhookId": "e8fe0dc0-414b-46d6-b172-2abc83ab4036",
+      "alwaysOutputData": true,
+      "credentials": {
+        "smtp": {
+          "id": "DoPbkBsi5CnzatRi",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Viewing Request": {
+      "main": [
+        [
+          {
+            "node": "Send Email to Company",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create an issue",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Confirmation to User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email to Company": {
+      "main": [
+        []
+      ]
+    },
+    "Create an issue": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3bd979b2-5bf5-4044-bd63-f14add86e6e6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "106bf74268a1557bb6b9081132803308735ffefaa2e140b9bd02733d0b687441"
+  },
+  "id": "CTwR9EPNuqCIPiSx",
+  "tags": []
+}
